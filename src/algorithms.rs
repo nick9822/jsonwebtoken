@@ -8,6 +8,7 @@ pub(crate) enum AlgorithmFamily {
     Rsa,
     Ec,
     Ed,
+    Other,
 }
 
 /// The algorithms supported for signing/verifying JWTs
@@ -42,6 +43,10 @@ pub enum Algorithm {
 
     /// Edwards-curve Digital Signature Algorithm (EdDSA)
     EdDSA,
+
+    /// Catch others unimplemented variants
+    #[serde(other)]
+    Other,
 }
 
 impl Default for Algorithm {
@@ -66,7 +71,7 @@ impl FromStr for Algorithm {
             "PS512" => Ok(Algorithm::PS512),
             "RS512" => Ok(Algorithm::RS512),
             "EdDSA" => Ok(Algorithm::EdDSA),
-            _ => Ok(None),
+            _ => Ok(Algorithm::Other),
         }
     }
 }
@@ -83,6 +88,7 @@ impl Algorithm {
             | Algorithm::PS512 => AlgorithmFamily::Rsa,
             Algorithm::ES256 | Algorithm::ES384 => AlgorithmFamily::Ec,
             Algorithm::EdDSA => AlgorithmFamily::Ed,
+            _ => AlgorithmFamily::Other,
         }
     }
 }
@@ -102,6 +108,7 @@ mod tests {
         assert!(Algorithm::from_str("PS256").is_ok());
         assert!(Algorithm::from_str("PS384").is_ok());
         assert!(Algorithm::from_str("PS512").is_ok());
+        assert!(Algorithm::from_str("RSA-OAEP").is_ok());
         assert!(Algorithm::from_str("").is_err());
     }
 }
