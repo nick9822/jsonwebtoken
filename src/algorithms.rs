@@ -66,7 +66,7 @@ impl FromStr for Algorithm {
             "PS512" => Ok(Algorithm::PS512),
             "RS512" => Ok(Algorithm::RS512),
             "EdDSA" => Ok(Algorithm::EdDSA),
-            _ => Err(ErrorKind::InvalidAlgorithmName.into()),
+            _ => Ok(None),
         }
     }
 }
